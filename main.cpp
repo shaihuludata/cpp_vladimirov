@@ -3,30 +3,45 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <stdlib.h>
+#include <iostream>
 
-using namespace std;
+//using namespace std;
 
-int f ();
+class string {
+    char * data;
+    size_t size;
+    size_t capacity;
+public:
+
+    string (char * s) {
+        size = strlen(s);
+        capacity = size + 10;
+        data = (char *)malloc(capacity);
+        strncpy(data, s, size);
+    }
+
+    ~string () {
+//        free(data);
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const string s) {
+        os << "my_string: " << s.data ;
+        return os;
+    }
+    // TODO copy assignment
+//    const string operator=() {
+//
+//    }
+};
 
 int main()
 {
-    char * r;
+    string s((char*)"Hello World!");
+//    string scopy(s);
+//    string s1("Other text");
+//    s1 = s;
+    std::cout << s << std::endl;
 
-    cout << "Hello World!" << endl;
-    char a[] = "auto_b=auti";
-    auto b = strtok_r(a, "=", &r);
-    cout << b << endl;
-    cout << r << endl;
-
-    f();
     return 0;
-}
-
-int f ()
-{
-  FILE * pFile;
-  pFile = fopen ("unexist.ent","r");
-  if (pFile == NULL)
-    printf ("Error opening file unexist.ent: %s\n",strerror(errno));
-  return 0;
 }
