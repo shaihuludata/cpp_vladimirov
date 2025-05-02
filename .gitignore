@@ -1,2 +1,8 @@
 a.out
 CMakeLists*
+/.vs/ProjectSettings.json
+/.vs/slnx.sqlite
+/.vs/slnx.sqlite-journal
+/.vs/vlad
+/.vs/VSWorkspaceState.json
+/.gitignore
