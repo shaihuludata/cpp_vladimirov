@@ -8,6 +8,9 @@ using namespace std;
 
 int f ();
 
+/**
+ * \section main.
+ */
 int main()
 {
     char * r;
