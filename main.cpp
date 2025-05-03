@@ -6,8 +6,6 @@
 #include <stdlib.h>
 #include <iostream>
 
-//using namespace std;
-
 class string {
     char * data;
     size_t size;
@@ -48,6 +46,9 @@ public:
     }
 };
 
+/**
+ * \section main.
+ */
 int main() {
     string s((char*)"Hello World!");
     string scopy(s);
