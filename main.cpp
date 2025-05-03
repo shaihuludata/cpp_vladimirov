@@ -1,7 +1,5 @@
 #include <iostream>
-#include <cstring>
 #include <stdio.h>
-#include <string.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <iostream>
@@ -13,17 +11,24 @@ class string {
 
 public:
     string (char * s) {
-        size = strlen(s);
+        for(size = 0; s[size] != '\0'; size++) { }
         capacity = size + 10;
         data = (char *)malloc(capacity);
-        strncpy(data, s, size);
+        for (size = 0; s[size] != '\0'; size++) {
+            data[size] = s[size];
+        }
     }
 
     string (const string &s) {
         size = s.size;
         capacity = s.capacity;
         data = (char *)malloc(capacity);
-        strncpy(data, s.data, size);
+        for (int i = 0; i <= size; i++) {
+            data[i] = s.data[i];
+            if (s.data[i] == '\0') {
+                break;
+            }
+        }
     }
 
     ~string () {
@@ -40,7 +45,12 @@ public:
         size = s.size;
         capacity = s.capacity;
         data = (char *)malloc(capacity);
-        strncpy(data, s.data, s.size);
+        for (int i = 0; i <= size; i++) {
+            data[i] = s.data[i];
+            if (s.data[i] == '\0') {
+                break;
+            }
+        }
         std::cerr << "not implemented yet" << std::endl;
         exit(1);
     }
