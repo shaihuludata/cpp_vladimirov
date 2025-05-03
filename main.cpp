@@ -1,8 +1,4 @@
 #include <iostream>
-#include <stdio.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <iostream>
 
 class string {
     char * data;
