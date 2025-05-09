@@ -11,6 +11,21 @@
  */
 using namespace std;
 
+int strlen(const char * a) {
+    int l = 0;
+    while(1) {
+        if (*(a + l) == '\0') { return l; }
+        else (l++);
+    }
+}
+
+void strncpy(char * a, const char * b, int l) {
+    for (int i=0; i<=l; i++) {
+        if (a[i] == '\0') { return; }
+        a[i] = b[i];
+    }
+}
+
 /**
  * \brief I create string class here..
  * Lesson-1 class realisation (part-ly).
@@ -45,7 +60,7 @@ private:
     /// \note +1 need to store '\0' 
     static const size_t MAX_QUANTITY = (32 + 1);
 
-    char m_data[GodString::MAX_QUANTITY];
+    char m_data[GodString::MAX_QUANTITY] = {0};
     int m_currentSize;
 };
 
@@ -56,16 +71,12 @@ GodString::GodString()
     : m_currentSize(0)
 {
     std::cout << "Luntik: I'm alive!" << std::endl;
-
-    memset(m_data, 0, MAX_QUANTITY);
     std::cout << "Luntik: Also, I'm empty!!!" << std::endl;
 }
 
 GodString::GodString(const char* str)
 {
     std::cout << "Luntik: I'm alive!" << std::endl;
-    memset(m_data, 0, MAX_QUANTITY);
-
     int len = strlen(str);
     if (len > MAX_QUANTITY)
     {
@@ -171,29 +182,29 @@ void Test2()
     GodString bb_str("bb");
 
     // Stage 2. Add() method. 
-    cout << "I'll add to \"" << aaaa_str.getStdString() << 
+    std::cout << "I'll add to \"" << aaaa_str.getStdString() <<
         "\" str \"" << bb_str.getStdString() << "\" str" << std::endl;
 
     aaaa_str.add(bb_str.getStdString());
-    cout << "Result is: " << aaaa_str.getStdString() << std::endl;
-    cout << "//note: It's magic, magic!!!!" << std::endl;
-    cout << std::endl;
+    std::cout << "Result is: " << aaaa_str.getStdString() << std::endl;
+    std::cout << "//note: It's magic, magic!!!!" << std::endl;
+    std::cout << std::endl;
 
     // Stage 3. Operators magic.   
-    cout << "create siberia string" << std::endl;
+    std::cout << "create siberia string" << std::endl;
     GodString siberia_str = "siberia";
-    cout << "Siberia body is: " << siberia_str.getStdString() << std::endl;
-    cout << "//note: It's magic, magic!!!!" << std::endl;
-    cout << std::endl;
+    std::cout << "Siberia body is: " << siberia_str.getStdString() << std::endl;
+    std::cout << "//note: It's magic, magic!!!!" << std::endl;
+    std::cout << std::endl;
 
     GodString sogood_str = " so good!";
-    cout << "I'll do \"" << siberia_str.getStdString() <<
+    std::cout << "I'll do \"" << siberia_str.getStdString() <<
         "\" + \"" << sogood_str.getStdString() << "\" str" << std::endl;
 
     siberia_str + sogood_str.getStdString();
 
-    cout << "Result is: " << siberia_str.getStdString() << std::endl;
-    cout << "//note: It's magic, magic!!!!" << std::endl;
+    std::cout << "Result is: " << siberia_str.getStdString() << std::endl;
+    std::cout << "//note: It's magic, magic!!!!" << std::endl;
 }
 
 /***********************************************************
