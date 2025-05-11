@@ -1,36 +1,51 @@
 #include <iostream>
 #include <cassert>
+#include <atomic>
 
-/* задача:
- * написать функцию
- * int replace_all для std::string
- * что-то вроде шаблонизатора, получается
- *
- */
 using namespace std;
 
-int replace_all(string & str, string & from, string & to);
+class Object {
+    static std::atomic<int> next_id;
+public:
+    int id;
+    double x, y;
 
-/**
- * \section main.
- */
+    Object(double a, double b) : x(a), y(b) {
+      id = next_id.fetch_add(1, memory_order_relaxed);
+    };
+
+    virtual ~Object() = default;
+
+    int get_id() const { return id; };
+
+    virtual void print(ostream& out) const {
+        out << id << " at " << x << "," << y;
+    }
+
+    friend ostream& operator<< (ostream& out, const Object & o) {
+        o.print(out);
+        return out;
+    }
+};
+
+class Stone : public Object {
+public:
+    double size_x, size_y;
+    int material;
+    Stone(double a, double b) : Object(a, b), size_x(5), size_y(5), material(0)
+    {};
+
+    void print(ostream& out) const override {
+        Object::print(out);
+    }
+
+    ~Stone() = default;
+};
+
+atomic<int> Object::next_id = 0;
+
 int main() {
-    string str("Hello %username! How are you doing, %username?");
-    std::cout << str << std::endl;
-    string from("%username");
-    string to("Denis, the Toxic");
-    int nrepl = replace_all(str, from, to);
-    std::cout << str << std::endl;
-    assert(nrepl == 2);
+    Stone o = Stone(100, 100);
+    cout << o << endl;
     return 0;
 }
-
-int replace_all(string & str, string & from, string & to) {
-    int nrepl = 0;
-    std::size_t npos;
-    while ((npos = str.find(from)) != std::string::npos) {
-        str.replace(npos, from.length(), to);
-        nrepl++;
-    }
-    return nrepl;
-};
