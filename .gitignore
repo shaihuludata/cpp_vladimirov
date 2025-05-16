@@ -1,5 +1,6 @@
 a.out
 CMakeLists*
+./build
 .vscode
 /.vs/ProjectSettings.json
 /.vs/slnx.sqlite

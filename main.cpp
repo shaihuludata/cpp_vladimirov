@@ -7,9 +7,9 @@
 #include <vector>
 #include <execution>
 #include <array>
-// #include <ranges>
-// #include <iterator>
-// #include <algorithm>
+#include <ranges>
+#include <iterator>
+#include <algorithm>
 #include <spdlog/spdlog.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Shape.hpp>
@@ -22,16 +22,10 @@ random_device rd;
 mt19937 gen(rd());
 uniform_int_distribution<> dist(-10, 10);
 
-inline const double size_x = 1024;
-inline const double size_y = 768;
+uniform_int_distribution<unsigned char> col(0, 255);
 
-std::array<const sf::Color, 5> colors[] = {
-    sf::Color::Green,
-    sf::Color::Magenta,
-    sf::Color::Red,
-    sf::Color::Cyan,
-    sf::Color::Blue,
-};
+inline const double size_x = 1280;
+inline const double size_y = 1024;
 
 class Object {
     static atomic<int> next_id;
@@ -70,9 +64,8 @@ class Moveable: public Object {
 public:
     unique_ptr<sf::Shape> shape;
     Moveable(double a, double b) : Object(a, b) {
-        auto circle = make_unique<sf::CircleShape>(20);
-        // colors->at(random()%colors->size())
-        circle->setFillColor(sf::Color(random()%255, random()%255, random()%255, random()%255));
+        auto circle = make_unique<sf::CircleShape>(5+random()%15);
+        circle->setFillColor(sf::Color(col(gen), col(gen), col(gen), col(gen)));
         circle->setPosition(x, y);
         shape = move(circle);
     };
@@ -114,17 +107,13 @@ int main(int argc, char ** argv) {
     if (argc >= 2) {
         n = std::stoi(argv[1]);
     };
+
     info("Welcome! N={}", n);
-
     vector<unique_ptr<Moveable>> objects;
-    objects.reserve(n);
 
-    for (int i = 0; i<n; i++) {
+    ranges::for_each(views::iota(0, n), [&objects](auto) {
         objects.push_back(make_unique<Stone>(size_x/2, size_y/2));
-    }
-    // ranges::for_each(views::iota(0, n), [&objects]() {
-    //     objects.push_back(make_unique<Stone>(100, 100));
-    // });
+    });
     sf::RenderWindow window(sf::VideoMode(size_x, size_y), "Box");
 
     while (window.isOpen()) {
@@ -133,15 +122,13 @@ int main(int argc, char ** argv) {
             if (event.type == sf::Event::Closed) window.close();
         }
         window.clear();
-        for_each(execution::par, objects.begin(), objects.end(), [](auto & o) {
-            o->walk(); o->log();
+        for_each(execution::seq, objects.begin(), objects.end(), [](auto & o) {
+            o->walk();
+            // o->log();
         });
-        // for_each(execution::par, objects.begin(), objects.end(), [window](auto & o) {
-            // window.draw(*o->shape);
-        // });
-        for (auto & o : objects) {
-            window.draw(*o->shape);
-        }
+        for_each(execution::seq, objects.begin(), objects.end(), [&window](auto & o) {
+           window.draw(*o->shape);
+        });
         window.display();
     }
 
